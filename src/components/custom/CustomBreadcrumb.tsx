@@ -1,13 +1,13 @@
+import { Link } from "react-router";
+import { SlashIcon } from "lucide-react";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { SlashIcon } from "lucide-react";
-import { Link } from "react-router";
-
+} from "@/components/ui/breadcrumb";
 
 interface Breadcrum {
   lable: string;
@@ -24,9 +24,7 @@ export const CustomBreadcrumb = ({ currentPage, breadcrum = [] }: Props) => {
     <Breadcrumb className="my-5">
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink>
             <Link to='/'>Home</Link>
-          </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator>
           <SlashIcon />
@@ -38,9 +36,7 @@ export const CustomBreadcrumb = ({ currentPage, breadcrum = [] }: Props) => {
                 <SlashIcon />
               </BreadcrumbSeparator>
               <BreadcrumbItem>
-                <BreadcrumbLink>
                   <Link to={bc.to}>{bc.lable}</Link>
-                </BreadcrumbLink>
               </BreadcrumbItem>
             </div>
           ))

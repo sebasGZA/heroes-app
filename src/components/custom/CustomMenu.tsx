@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router"
+import { useLocation } from "react-router"
 import {
     NavigationMenu,
     NavigationMenuItem,
@@ -18,20 +18,22 @@ export const CustomMenu = () => {
             <NavigationMenuList>
                 <NavigationMenuItem>
                     <NavigationMenuLink
-                        className={cn(isActive('/') && ` bg-slate-200`,'rounded-md p-2')}
+                        href="/"
+                        className={cn(isActive('/') && ` bg-slate-200`, 'rounded-md p-2')}
                     >
-                        <Link to="/">Home</Link>
+                        Home
                     </NavigationMenuLink>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
                     <NavigationMenuLink
+                        href="/search"
                         className={cn(isActive('/search') && ` bg-slate-200`, 'rounded-md p-2')}
                     >
-                        <Link to="/search">Search</Link>
-                    </NavigationMenuLink>
+                        Search
+                    </ NavigationMenuLink>
                 </NavigationMenuItem>
             </NavigationMenuList>
-        </NavigationMenu>
+        </NavigationMenu >
     )
 }
