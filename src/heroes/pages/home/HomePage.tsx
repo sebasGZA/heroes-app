@@ -9,17 +9,16 @@ import { CustomPagination } from "@/components/custom/CustomPagination"
 import { CustomBreadcrumb } from "@/components/custom/CustomBreadcrumb"
 import { getHeroesByPageAction } from "@/heroes/actions/get-heroes-by-page"
 
-type ActiveTabs = 'all' | 'favorites' | 'heroes' | 'villians';
+type ActiveTabs = 'all' | 'favorites' | 'heroes' | 'villains';
 
 export default function HomePage() {
 
     const [activeTab, setActiveTab] = useState<ActiveTabs>('all');
-    const { data } = useQuery({
+    const { data: heroesResponse } = useQuery({
         queryKey: ['heroes'],
         queryFn: () => getHeroesByPageAction(),
         staleTime: 1000 * 60 * 5,
-    })
-    console.log(data)
+    });
 
     return (
         <>
@@ -32,7 +31,8 @@ export default function HomePage() {
             <CustomBreadcrumb currentPage="Heroes" />
 
             {/* Stats Dashboard */}
-            <HeroStats />
+            <HeroStats
+            />
 
             {/* Tabs */}
             <Tabs value={activeTab} className="mb-8">
@@ -41,7 +41,7 @@ export default function HomePage() {
                         value="all"
                         onClick={() => setActiveTab('all')}
                     >
-                        All Characters (16)
+                        All Characters ({heroesResponse?.heroes.length})
                     </TabsTrigger>
 
                     <TabsTrigger
@@ -56,36 +56,36 @@ export default function HomePage() {
                         value="heroes"
                         onClick={() => setActiveTab('heroes')}
                     >
-                        Heroes (12)
+                        Heroes (10)
                     </TabsTrigger>
 
                     <TabsTrigger
                         value="villains"
-                        onClick={() => setActiveTab('villians')}
+                        onClick={() => setActiveTab('villains')}
                     >
-                        Villains (2)
+                        Villains (10)
                     </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value='all'>
-                    <HeroGrid />
+                    <HeroGrid list={heroesResponse?.heroes ?? []} />
                 </TabsContent>
 
                 <TabsContent value='favorites'>
-                    <HeroGrid />
+                    <HeroGrid list={[]} />
                 </TabsContent>
 
                 <TabsContent value='heroes'>
-                    <HeroGrid />
+                    <HeroGrid list={[]} />
                 </TabsContent>
 
                 <TabsContent value='villians'>
-                    <HeroGrid />
+                    <HeroGrid list={[]} />
                 </TabsContent>
             </Tabs>
 
             {/* Pagination */}
-            <CustomPagination totalPages={3} />
+            <CustomPagination totalPages={10} />
         </>
     )
 }
