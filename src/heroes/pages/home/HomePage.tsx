@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
 import { useSearchParams } from "react-router"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -7,7 +7,6 @@ import { HeroStats } from "@/heroes/components/HeroStats"
 import { HeroGrid } from "@/heroes/components/HeroGrid"
 import { CustomPagination } from "@/components/custom/CustomPagination"
 import { CustomBreadcrumb } from "@/components/custom/CustomBreadcrumb"
-import { useMemo } from "react"
 import { useSummary } from "@/heroes/hooks/useSummary"
 import { usePaginatedHeroes } from "@/heroes/hooks/usePaginatedHeroes"
 
@@ -18,13 +17,18 @@ export default function HomePage() {
     const activeTab = searchParams.get('tab') ?? 'all';
     const page = searchParams.get('page') ?? '1';
     const limit = searchParams.get('limit') ?? '6';
+    const category = searchParams.get('category') ?? 'all';
 
     const selectedTab = useMemo(() => {
         const validTabs = ['all', 'favorites', 'heroes', 'villains'];
         return validTabs.includes(activeTab) ? activeTab : 'all';
     }, [activeTab])
 
-    const { data: heroesResponse } = usePaginatedHeroes(page, limit)
+    const { data: heroesResponse } = usePaginatedHeroes(
+        page,
+        limit,
+        category,
+    )
     const { data: summary } = useSummary()
 
     return (
@@ -69,6 +73,8 @@ export default function HomePage() {
                         value="heroes"
                         onClick={() => setSearchParams((prev) => {
                             prev.set('tab', 'heroes')
+                            prev.set('category', 'Hero')
+                            prev.set('page', '1')
                             return prev;
                         })}
                     >
@@ -79,6 +85,8 @@ export default function HomePage() {
                         value="villains"
                         onClick={() => setSearchParams((prev) => {
                             prev.set('tab', 'villains')
+                            prev.set('category', 'Villain')
+                            prev.set('page', '1')
                             return prev;
                         })}
                     >
@@ -95,11 +103,11 @@ export default function HomePage() {
                 </TabsContent>
 
                 <TabsContent value='heroes'>
-                    <HeroGrid list={[]} />
+                    <HeroGrid list={heroesResponse?.heroes ?? []} />
                 </TabsContent>
 
-                <TabsContent value='villians'>
-                    <HeroGrid list={[]} />
+                <TabsContent value='villains'>
+                    <HeroGrid list={heroesResponse?.heroes ?? []} />
                 </TabsContent>
             </Tabs>
 
