@@ -8,23 +8,45 @@ import {
     CardTitle,
 } from '@/components/ui/card'
 import { HeroStatCard } from './HeroStatCard'
+import { useQuery } from '@tanstack/react-query'
+import { getSummaryAction } from '../actions/get-summary'
 
 export const HeroStats = () => {
+
+    const { data: summary } = useQuery({
+        queryKey: ['summary'],
+        queryFn: () => getSummaryAction(),
+        staleTime: 1000 * 60 * 5,
+    });
+
     return (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Total Characters</CardTitle>
+                    <CardTitle
+                        className="text-sm font-medium"
+                    >Total Characters
+                    </CardTitle>
                     <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">16</div>
+                    <div
+                        className="text-2xl font-bold"
+                    >
+                        {summary?.totalHeroes}
+                    </div>
                     <div className="flex gap-1 mt-2">
-                        <Badge variant="secondary" className="text-xs">
-                            12 Heroes
+                        <Badge
+                            variant="secondary"
+                            className="text-xs"
+                        >
+                            {summary?.heroCount} Heroes
                         </Badge>
-                        <Badge variant="destructive" className="text-xs">
-                            2 Villains
+                        <Badge
+                            variant="destructive"
+                            className="text-xs"
+                        >
+                            {summary?.villainCount} Villains
                         </Badge>
                     </div>
                 </CardContent>
@@ -32,7 +54,8 @@ export const HeroStats = () => {
 
             <HeroStatCard
                 title='Favorites'
-                icon={<Heart className="h-4 w-4 text-muted-foreground" />
+                icon={
+                    <Heart className="h-4 w-4 text-muted-foreground" />
                 }
             >
                 <div className="text-2xl font-bold text-red-600">3</div>
@@ -41,20 +64,30 @@ export const HeroStats = () => {
 
             <HeroStatCard
                 title='Strongest'
-                icon={<Zap className="h-4 w-4 text-muted-foreground" />
+                icon={
+                    <Zap className="h-4 w-4 text-muted-foreground" />
                 }
             >
-                <div className="text-lg font-bold">Superman</div>
-                <p className="text-xs text-muted-foreground">Strength: 10/10</p>
+                <div className="text-lg font-bold">
+                    {summary?.strongestHero?.alias}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                    Strength: {summary?.strongestHero?.strength}
+                </p>
             </HeroStatCard>
 
             <HeroStatCard
                 title='Smartest'
-                icon={<Trophy className="h-4 w-4 text-muted-foreground" />
+                icon={
+                    <Trophy className="h-4 w-4 text-muted-foreground" />
                 }
             >
-                <div className="text-lg font-bold">Batman</div>
-                <p className="text-xs text-muted-foreground">Intelligence: 10/10</p>
+                <div className="text-lg font-bold">
+                    {summary?.strongestHero?.alias}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                    Intelligence: {summary?.strongestHero?.intelligence}
+                </p>
             </HeroStatCard>
         </div>
     )
