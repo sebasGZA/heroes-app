@@ -11,14 +11,16 @@ interface FavoriteHero {
 export const FavoriteHeroContext = createContext({} as FavoriteHero)
 
 
-const getFavoritesFromStorage = () => {
-    const favorites = localStorage.getItem('favorites');
-    return favorites ? JSON.parse(favorites) : {}
+const getFavoritesFromStorage = (): Hero[] => {
+    const favoritesData = localStorage.getItem('favorites');
+    console.log(favoritesData)
+    return favoritesData ? JSON.parse(favoritesData) : []
 }
 
 export const FavoriteHeroProvider = ({ children }: PropsWithChildren) => {
 
-    const [favorites, setFavorites] = useState(getFavoritesFromStorage() as Hero[]);
+    const [favorites, setFavorites] = useState(getFavoritesFromStorage());
+
     const toggleFavorite = (hero: Hero) => {
         const heroExists = favorites.find(h => h.id === hero.id);
         if (heroExists) {
