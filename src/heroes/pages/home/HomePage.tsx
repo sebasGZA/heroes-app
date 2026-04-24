@@ -7,8 +7,9 @@ import { HeroStats } from "@/heroes/components/HeroStats"
 import { HeroGrid } from "@/heroes/components/HeroGrid"
 import { CustomPagination } from "@/components/custom/CustomPagination"
 import { CustomBreadcrumb } from "@/components/custom/CustomBreadcrumb"
-import { getHeroesByPageAction } from "@/heroes/actions/get-heroes-by-page"
 import { useMemo } from "react"
+import { useSummary } from "@/heroes/hooks/useSummary"
+import { usePaginatedHeroes } from "@/heroes/hooks/usePaginatedHeroes"
 
 export default function HomePage() {
 
@@ -23,11 +24,8 @@ export default function HomePage() {
         return validTabs.includes(activeTab) ? activeTab : 'all';
     }, [activeTab])
 
-    const { data: heroesResponse } = useQuery({
-        queryKey: ['heroes', { page, limit }],
-        queryFn: () => getHeroesByPageAction(+page, +limit),
-        staleTime: 1000 * 60 * 5,
-    });
+    const { data: heroesResponse } = usePaginatedHeroes(page, limit)
+    const { data: summary } = useSummary()
 
     return (
         <>
@@ -53,7 +51,7 @@ export default function HomePage() {
                             return prev;
                         })}
                     >
-                        All Characters ({heroesResponse?.heroes.length})
+                        All Characters ({summary?.totalHeroes})
                     </TabsTrigger>
 
                     <TabsTrigger
@@ -74,7 +72,7 @@ export default function HomePage() {
                             return prev;
                         })}
                     >
-                        Heroes (10)
+                        Heroes ({summary?.heroCount})
                     </TabsTrigger>
 
                     <TabsTrigger
@@ -84,7 +82,7 @@ export default function HomePage() {
                             return prev;
                         })}
                     >
-                        Villains (10)
+                        Villains ({summary?.villainCount})
                     </TabsTrigger>
                 </TabsList>
 

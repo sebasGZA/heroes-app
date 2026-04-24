@@ -8,16 +8,11 @@ import {
     CardTitle,
 } from '@/components/ui/card'
 import { HeroStatCard } from './HeroStatCard'
-import { useQuery } from '@tanstack/react-query'
-import { getSummaryAction } from '../actions/get-summary'
+import { useSummary } from '../hooks/useSummary'
 
 export const HeroStats = () => {
 
-    const { data: summary } = useQuery({
-        queryKey: ['summary'],
-        queryFn: () => getSummaryAction(),
-        staleTime: 1000 * 60 * 5,
-    });
+    const { data: summary } = useSummary()
 
     return (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
