@@ -13,7 +13,6 @@ export const FavoriteHeroContext = createContext({} as FavoriteHero)
 
 const getFavoritesFromStorage = (): Hero[] => {
     const favoritesData = localStorage.getItem('favorites');
-    console.log(favoritesData)
     return favoritesData ? JSON.parse(favoritesData) : []
 }
 
